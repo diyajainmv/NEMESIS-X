@@ -236,3 +236,4 @@ models/*.pt
 
 !data/videos/normal/
 !data/videos/abnormal/
+*.pt
