@@ -235,4 +235,9 @@ models/*.pt
 !data/events/.gitkeep
 
 !data/videos/normal/
-!data/videos/abnormal/
+!data/videos/abnormal/data/tracking_history.db
+outputs/
+yolo11n.pt
+data/tracking_history.db
+outputs/
+yolo11n.pt
