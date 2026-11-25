@@ -221,3 +221,18 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# NEMESIS-X project files
+data/videos/*
+data/frames/*
+data/events/*
+models/*.pt
+
+# Keep required empty folders in Git
+!data/videos/normal/.gitkeep
+!data/videos/abnormal/.gitkeep
+!data/frames/.gitkeep
+!data/events/.gitkeep
+
+!data/videos/normal/
+!data/videos/abnormal/
