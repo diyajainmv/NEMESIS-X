@@ -9,10 +9,11 @@ import pandas as pd
 
 DATABASE = "data/tracking_history.db"
 OUTPUT_DIR = Path("outputs")
+MOVEMENT_THRESHOLD = 5.0
 
 
 def calculate_direction(dx, dy):
-    if np.hypot(dx, dy) < 5:
+    if np.hypot(dx, dy) < MOVEMENT_THRESHOLD:
         return "Stationary"
 
     angle = np.degrees(np.arctan2(-dy, dx)) % 360
@@ -27,9 +28,7 @@ def calculate_direction(dx, dy):
 
 
 def calculate_duration(timestamps):
-    values = pd.to_numeric(
-        timestamps, errors="coerce"
-    )
+    values = pd.to_numeric(timestamps, errors="coerce")
 
     if values.notna().all():
         return max(0.0, float(values.max() - values.min()))
@@ -71,9 +70,7 @@ def generate_scene_dna():
     missing = required - set(history.columns)
 
     if missing:
-        raise ValueError(
-            f"Missing database columns: {missing}"
-        )
+        raise ValueError(f"Missing database columns: {missing}")
 
     results = []
 
@@ -86,40 +83,33 @@ def generate_scene_dna():
 
         if len(positions) > 1:
             movements = np.diff(positions, axis=0)
-
-            distances = np.linalg.norm(
-                movements, axis=1
-            )
+            distances = np.linalg.norm(movements, axis=1)
 
             total_distance = float(distances.sum())
 
-            dx = float(
-                positions[-1][0] - positions[0][0]
+            moving_observations = int(
+                np.sum(distances >= MOVEMENT_THRESHOLD)
             )
 
-            dy = float(
-                positions[-1][1] - positions[0][1]
-            )
+            dx = float(positions[-1][0] - positions[0][0])
+            dy = float(positions[-1][1] - positions[0][1])
         else:
             total_distance = 0.0
+            moving_observations = 0
             dx = 0.0
             dy = 0.0
 
         net_displacement = float(np.hypot(dx, dy))
-
         direction = calculate_direction(dx, dy)
 
         duration = calculate_duration(group["timestamp"])
 
         average_speed = (
-            total_distance / duration
-            if duration > 0 else 0.0
+            total_distance / duration if duration > 0 else 0.0
         )
 
         activity = (
-            "Stationary"
-            if total_distance < 5
-            else "Moving"
+            "Moving" if moving_observations > 0 else "Stationary"
         )
 
         class_name = (
@@ -137,14 +127,11 @@ def generate_scene_dna():
             "first_frame": int(group["frame_number"].min()),
             "last_frame": int(group["frame_number"].max()),
             "total_movement_pixels": round(total_distance, 2),
-            "net_displacement_pixels": round(
-                net_displacement, 2
-            ),
+            "net_displacement_pixels": round(net_displacement, 2),
             "movement_direction": direction,
             "duration_seconds": round(duration, 2),
-            "average_speed_pixels_per_second": round(
-                average_speed, 2
-            ),
+            "average_speed_pixels_per_second": round(average_speed, 2),
+            "moving_observations": moving_observations,
             "activity_status": activity
         })
 
@@ -158,11 +145,7 @@ def generate_scene_dna():
     report.to_csv(csv_path, index=False)
 
     with open(json_path, "w", encoding="utf-8") as file:
-        json.dump(
-            results,
-            file,
-            indent=4
-        )
+        json.dump(results, file, indent=4)
 
     print("\n========== SCENE DNA REPORT ==========")
     print(report.to_string(index=False))

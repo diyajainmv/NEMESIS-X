@@ -1,5 +1,9 @@
+
 torch==2.11.0
 torchvision==0.26.0
 opencv-python
 ultralytics
 numpy
+supervision==0.32.2
+trackers==2.7.0
+pandas
