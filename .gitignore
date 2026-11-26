@@ -236,3 +236,26 @@ models/*.pt
 
 !data/videos/normal/
 !data/videos/abnormal/
+# NEMESIS-X additional exclusions
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+*.pt
+*.onnx
+
+# Generated files
+data/outputs/
+outputs/
+temp/
+*.tmp
+
+# Local debugging files
+check_tracking.py
+inspect_db.py
+member3_temp.txt
+
+# Ignore local test videos
+*.avi
+*.mp4
+*.mov
