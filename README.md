@@ -135,13 +135,13 @@ Our objective is to move beyond traditional CCTV monitoring by developing a syst
 
 ## 11. Team Details
 
-**Team Name:** [ADD TEAM NAME]
+**Team Name:** [CORE 4]
 
 **Team Members:**
-- [ADD TEAM MEMBER 1]
-- [ADD TEAM MEMBER 2]
-- [ADD TEAM MEMBER 3]
-- [ADD TEAM MEMBER 4]
+- [Diya Jain MV]
+- [Jyothi N C]
+- [Kaneez Fathima U]
+- [Madhiya banu Talageri]
 
 ---
 
